@@ -2,47 +2,37 @@ declare module 'klasa' {
 
 	import { ExecOptions } from 'child_process';
 
-	import {
-		APIMessage,
-		BufferResolvable,
-		CategoryChannel,
-		Channel,
-		Client,
-		ClientApplication,
-		ClientOptions,
-		ClientUser,
-		Collection,
-		DMChannel,
-		Emoji,
-		EmojiResolvable,
-		Guild,
-		GuildChannel,
-		GuildEmoji,
-		GuildMember,
-		Message,
-		MessageAdditions,
-		MessageAttachment,
-		MessageCollector,
-		MessageEmbed,
-		MessageOptions,
-		MessageReaction,
-		MessageType,
-		PermissionResolvable,
-		Permissions,
-		Presence,
-		RateLimitData,
-		ReactionCollector,
-		Role,
-		Snowflake,
-		Speaking,
-		StringResolvable,
-		TextChannel,
-		User,
-		UserResolvable,
-		VoiceChannel,
-		VoiceState,
-		WebhookClient
+	import {	
+		APIMessage,	
+		Channel,	
+		Client,	
+		ClientOptions,	
+		Collection,	
+		DMChannel,	
+		EmojiResolvable,	
+		Guild,	
+		GuildMember,	
+		Message,	
+		MessageAdditions,	
+		MessageEmbed,	
+		MessageOptions,	
+		MessageReaction,	
+		MessageType,	
+		PermissionResolvable,	
+		Permissions,	
+		ReactionCollector,	
+		Role,	
+		Snowflake,	
+		StringResolvable,	
+		TextChannel,	
+		User,	
 	} from 'discord.js';
+
+	import {
+		Schema,
+		GatewayStorageOptions,
+		Settings
+	} from '@klasa/settings-gateway';
 
 	export const version: string;
 
@@ -121,35 +111,6 @@ declare module 'klasa' {
 		};
 	}
 
-	export class SettingResolver extends Resolver {
-		public any(data: any): Promise<any>;
-		public boolean(data: any, guild: KlasaGuild, name: string): Promise<boolean>;
-		public boolean(input: boolean | string): Promise<boolean>;
-		public channel(data: any, guild: KlasaGuild, name: string): Promise<Channel>;
-		public channel(input: Channel | Snowflake): Promise<Channel>;
-		public command(data: any, guild: KlasaGuild, name: string): Promise<Command>;
-		public float(data: any, guild: KlasaGuild, name: string, minMax: { min: number, max: number }): Promise<number>;
-		public float(input: string | number): Promise<number>;
-		public guild(data: any, guild: KlasaGuild, name: string): Promise<KlasaGuild>;
-		public guild(input: KlasaGuild | Snowflake): Promise<KlasaGuild>;
-		public integer(data: any, guild: KlasaGuild, name: string, minMax: { min: number, max: number }): Promise<number>;
-		public integer(input: string | number): Promise<number>;
-		public language(data: any, guild: KlasaGuild, name: string): Promise<Language>;
-		public role(data: any, guild: KlasaGuild, name: string): Promise<Role>;
-		public role(input: Role | Snowflake, guild: KlasaGuild): Promise<Role>;
-		public string(data: any, guild: KlasaGuild, name: string, minMax: { min: number, max: number }): Promise<string>;
-		public string(input: string): Promise<string>;
-		public textchannel(data: any, guild: KlasaGuild, name: string): Promise<TextChannel>;
-		public url(data: any, guild: KlasaGuild, name: string): Promise<string>;
-		public url(input: string): Promise<string>;
-		public user(data: any, guild: KlasaGuild, name: string): Promise<KlasaUser>;
-		public user(input: KlasaUser | GuildMember | KlasaMessage | Snowflake): Promise<KlasaUser>;
-		public voicechannel(data: any, guild: KlasaGuild, name: string): Promise<VoiceChannel>;
-		public categorychannel(data: any, guild: KlasaGuild, name: string): Promise<VoiceChannel>;
-
-		public static maxOrMin(guild: KlasaGuild, value: number, min: number, max: number, name: string, suffix: string): boolean;
-	}
-
 //#endregion Parsers
 
 //#region Permissions
@@ -163,7 +124,7 @@ declare module 'klasa' {
 		public remove(level: number): this;
 		public set(level: number, obj: PermissionLevelOptions | symbol): this;
 
-		public run(message: KlasaMessage, min: number): PermissionLevelsData;
+		public run(message: KlasaMessage, min: number): PermissionLevelsData | Promise<PermissionLevelsData>;
 	}
 
 //#endregion Permissions
@@ -221,136 +182,63 @@ declare module 'klasa' {
 
 //#region Settings
 
-	export class Settings {
-		public constructor(manager: Gateway, data: any);
-		public readonly client: KlasaClient;
-		public readonly gateway: Gateway;
-		public readonly id: string;
-		public readonly synchronizing: boolean;
-		private _existsInDB: boolean;
+	// https://github.com/microsoft/TypeScript/issues/18877
+	export {
+		ArrayActions,
+		ArrayActionsString,
+		DeepReadonly,
+		Gateway,
+		GatewayDriver,
+		GatewayDriverJson,
+		GatewayStorage,
+		GatewayStorageJson,
+		GatewayStorageOptions,
+		KeyedObject,
+		Provider,
+		ProviderStore,
+		ProxyMap,
+		ProxyMapEntry,
+		ReadonlyKeyedObject,
+		Schema,
+		SchemaAddCallback,
+		SchemaEntry,
+		SchemaEntryEditOptions,
+		SchemaEntryFilterFunction,
+		SchemaEntryJson,
+		SchemaEntryOptions,
+		SchemaFolder,
+		SchemaFolderJson,
+		SchemaJson,
+		Serializer,
+		SerializerStore,
+		SerializerUpdateContext,
+		Settings,
+		SettingsExistenceStatus,
+		SettingsFolder,
+		SettingsFolderJson,
+		SettingsFolderResetOptions,
+		SettingsFolderUpdateOptions,
+		SettingsFolderUpdateOptionsNonOverwrite,
+		SettingsFolderUpdateOptionsOverwrite,
+		SettingsUpdateContext,
+		SettingsUpdateResult,
+		SettingsUpdateResults,
+		SQLProvider,
+		SqlProviderParsedTupleUpdateInput
+	} from '@klasa/settings-gateway';
 
-		public get<T = any>(path: string | string[]): T;
-		public clone(): Settings;
-		public sync(force?: boolean): Promise<this>;
-		public destroy(): Promise<this>;
-
-		public reset(key?: string | string[], options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
-		public reset(key?: string | string[], guild?: KlasaGuild, options?: SettingsResetOptions): Promise<SettingsUpdateResult>;
-		public update(key: Record<string, any>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: Record<string, any>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string, value: any, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(key: string, value: any, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(entries: Array<[string, any]>, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public update(entries: Array<[string, any]>, guild?: GuildResolvable, options?: SettingsUpdateOptions): Promise<SettingsUpdateResult>;
-		public list(message: KlasaMessage, path: SchemaFolder | string): string;
-		public resolveString(message: KlasaMessage, path: SchemaPiece | string): string;
-
-		private _save(data: SettingsUpdateResult): Promise<void>;
-		private _setValueByPath(piece: SchemaPiece, parsedID: any): { updated: boolean, old: any };
-		private _patch(data: Record<string, any>, instance?: object, schema?: SchemaFolder): void;
-
-		public toJSON(): Record<string, any>;
-		public toString(): string;
-	}
-
-	export class Gateway extends GatewayStorage {
-		public constructor(store: GatewayDriver, type: string, schema: Schema, provider: string);
-		public store: GatewayDriver;
-		public syncQueue: Collection<string, Promise<Settings>>;
-		public readonly Settings: Settings;
-		private cache: Collection<string, { settings: Settings, [k: string]: any }>;
-
-		public get(input: string | number, create?: boolean): Settings;
-		public sync(input: string): Promise<Settings>;
-		public sync(input?: string[]): Promise<Gateway>;
-	}
-
-	export class QueryBuilder {
-		public constructor(datatypes: Record<string, QueryBuilderDatatype>, options?: QueryBuilderOptions);
-		public get(type: string): QueryBuilderDatatype | null;
-		public parse(schemaPiece: SchemaPiece): string;
-		public parseValue(value: any, schemaPiece: SchemaPiece, datatype?: QueryBuilderDatatype): string;
-		private arrayResolver: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
-		private formatDatatype: (name: string, datatype: string, def?: string) => string;
-		private readonly _datatypes: Record<string, QueryBuilderDatatype>;
-	}
-
-	export class GatewayDriver {
-		private constructor(client: KlasaClient);
-		public readonly client: KlasaClient;
-		public keys: Set<string>;
-		public ready: boolean;
-		public guilds: Gateway;
-		public users: Gateway;
-		public clientStorage: Gateway;
-		private _queue: Array<(() => Gateway)>;
-
-		public [Symbol.iterator](): Iterator<[string, Gateway]>;
-		public register(name: string, options?: GatewayDriverRegisterOptions): this;
-		public init(): Promise<void>;
-		public sync(input?: string[]): Promise<Array<Gateway>>;
-
-		public toJSON(): GatewayDriverJSON;
-		public toString(): string;
-	}
-
-	export abstract class GatewayStorage {
-		public constructor(client: KlasaClient, type: string, schema: Schema, provider: string);
-		public readonly client: KlasaClient;
-		public readonly defaults: any;
-		public readonly provider: Provider | null;
-		public readonly providerName: string;
-		public readonly type: string;
-		public ready: boolean;
-		public schema: SchemaFolder | null;
-
-		public getPath(key?: string, options?: GatewayGetPathOptions): GatewayGetPathResult | null;
-		public init(): Promise<void>;
-		public toJSON(): GatewayJSON;
-		public toString(): string;
-	}
-
-	export class Schema extends Map<string, SchemaPiece | SchemaFolder> {
-		public constructor(path?: string);
-		public readonly configurableKeys: Array<string>;
-		public readonly defaults: Record<string, any>;
-		public readonly path: string;
-		public readonly paths: Map<string, SchemaPiece | SchemaFolder>;
-		public readonly type: 'Folder';
-		public add(key: string, type: string, options?: SchemaPieceOptions): this;
-		public add(key: string, callback: (folder: SchemaFolder) => any): this;
-		public remove(key: string): this;
-		public get<T = Schema | SchemaPiece | SchemaFolder>(key: string | Array<string>): T;
-		public toJSON(): Record<string, any>;
-	}
-
-	export class SchemaFolder extends Schema {
-		public constructor(parent: Schema | SchemaFolder, key: string);
-		public readonly key: string;
-		public readonly parent: Schema | SchemaFolder;
-	}
-
-	export class SchemaPiece {
-		public constructor(parent: Schema | SchemaFolder, key: string, type: string, options: SchemaPieceOptions);
-		public readonly client: KlasaClient | null;
-		public readonly parent: Schema | SchemaFolder;
-		public readonly key: string;
-		public readonly serializer: Serializer;
-		public readonly type: string;
-		public readonly path: string;
-		public array: boolean;
-		public configurable: boolean;
-		public default: any;
-		public min: number | null;
-		public max: number | null;
-		public filter: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
-		public parse<T>(value: any, guild?: KlasaGuild): T;
-		public edit(options?: SchemaPieceEditOptions): this;
-		public toJSON(): SchemaPieceOptions;
-
-		private isValid(): boolean;
-		private _generateDefault(): Array<any> | false | null;
-	}
+	export {
+		DATATYPES,
+		OPTIONS,
+		QueryBuilder,
+		QueryBuilderArray,
+		QueryBuilderArraySerializer,
+		QueryBuilderDatatype,
+		QueryBuilderEntryOptions,
+		QueryBuilderFormatDatatype,
+		QueryBuilderSerializer,
+		QueryBuilderType
+	} from '@klasa/querybuilder';
 
 //#endregion Settings
 
@@ -495,51 +383,10 @@ declare module 'klasa' {
 		public run<T = any>(argument: string, possible: Possible, message: KlasaMessage): Promise<Array<T>>;
 	}
 
-	export abstract class Provider extends Piece {
-		public constructor(store: ProviderStore, file: string[], directory: string, options?: ProviderOptions);
-		public abstract create(table: string, entry: string, data: any): Promise<any>;
-		public abstract createTable(table: string, rows?: any[]): Promise<any>;
-		public abstract delete(table: string, entry: string): Promise<any>;
-		public abstract deleteTable(table: string): Promise<any>;
-		public abstract get(table: string, entry: string): Promise<any>;
-		public abstract getAll(table: string): Promise<any[]>;
-		public abstract has(table: string, entry: string): Promise<boolean>;
-		public abstract hasTable(table: string): Promise<boolean>;
-		public abstract update(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>): Promise<any>;
-		public abstract replace(table: string, entry: string, data: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>): Promise<any>;
-		// The following is not required by SettingGateway but might be available in some providers
-		public getKeys(table: string): Promise<string[]>;
-		protected parseUpdateInput<T = Record<string, any>>(updated: T | SettingsUpdateResult): T;
-
-		public shutdown(): Promise<void>;
-		public toJSON(): PieceProviderJSON;
-	}
-
-	export abstract class SQLProvider extends Provider {
-		public abstract qb: QueryBuilder;
-		public abstract addColumn<T = any>(table: string, columns: SchemaFolder | SchemaPiece): Promise<T>;
-		public abstract removeColumn<T = any>(table: string, columns: string | string[]): Promise<T>;
-		public abstract updateColumn<T = any>(table: string, piece: SchemaPiece): Promise<T>;
-		public abstract getColumns(table: string): Promise<Array<string>>;
-		protected parseUpdateInput<T = [string, any]>(updated?: SettingsUpdateResultEntry[] | [string, any][] | Record<string, any>, resolve?: boolean): T;
-		protected parseEntry<T = Record<string, any>>(gateway: string | Gateway, entry: Record<string, any>): T;
-		protected parseValue<T = any>(value: any, schemaPiece: SchemaPiece): T;
-		private _parseGatewayInput(updated: SettingsUpdateResultEntry[], keys: string[], values: string[], resolve?: boolean): void;
-	}
-
 	export abstract class Task extends Piece {
 		public constructor(store: TaskStore, file: string[], directory: string, options?: TaskOptions);
 		public abstract run(data?: any): unknown;
 		public toJSON(): PieceTaskJSON;
-	}
-
-	export abstract class Serializer extends AliasPiece {
-		public constructor(store: SerializerStore, file: string[], directory: string, options?: SerializerOptions);
-		public serialize(data: any): PrimitiveType;
-		public stringify(data: any): string;
-		public toJSON(): PieceSerializerJSON;
-		public abstract deserialize(data: any, piece: SchemaPiece, language: Language, guild?: KlasaGuild): Promise<any>;
-		public static regex: MentionRegex;
 	}
 
 //#endregion Pieces
@@ -556,8 +403,8 @@ declare module 'klasa' {
 
 		protected registerCoreDirectory(directory: string): this;
 		public delete(name: K | V): boolean;
-		public get(key: K): V;
-		public get<T extends V>(key: K): T;
+		public get(key: K): V | undefined;
+		public get<T extends V>(key: K): T | undefined;
 		public init(): Promise<any[]>;
 		public load(directory: string, file: string[]): V;
 		public loadAll(): Promise<number>;
@@ -599,13 +446,7 @@ declare module 'klasa' {
 		public run(message: KlasaMessage): Promise<void>;
 	}
 
-	export class ProviderStore extends Store<string, Provider, typeof Provider> {
-		public readonly default: Provider;
-	}
-
 	export class TaskStore extends Store<string, Task, typeof Task> { }
-
-	export class SerializerStore extends AliasStore<string, Serializer, typeof Serializer> { }
 
 //#endregion Stores
 
@@ -989,7 +830,6 @@ declare module 'klasa' {
 		createPiecesFolders?: boolean;
 		customPromptDefaults?: CustomPromptDefaults;
 		disabledCorePieces?: string[];
-		gateways?: GatewaysOptions;
 		language?: string;
 		noPrefixDM?: boolean;
 		owners?: string[];
@@ -997,15 +837,21 @@ declare module 'klasa' {
 		pieceDefaults?: PieceDefaults;
 		prefix?: string | string[];
 		prefixCaseInsensitive?: boolean;
-		preserveSettings?: boolean;
 		production?: boolean;
 		providers?: ProvidersOptions;
 		readyMessage?: ReadyMessage;
 		regexPrefix?: RegExp;
 		schedule?: ScheduleOptions;
+		settings: SettingsOptions;
 		slowmode?: number;
 		slowmodeAggressive?: boolean;
 		typing?: boolean;
+	}
+
+	export interface SettingsOptions {
+		preserve?: boolean;
+		throwOnError?: boolean;
+		gateways?: GatewaysOptions;
 	}
 
 	export interface ScheduleOptions {
@@ -1038,11 +884,12 @@ declare module 'klasa' {
 
 	export type ReadyMessage = string | ((client: KlasaClient) => string);
 
-	export interface GatewaysOptions extends Partial<Record<string, GatewayDriverRegisterOptions>> {
-		clientStorage?: GatewayDriverRegisterOptions;
-		guilds?: GatewayDriverRegisterOptions;
-		users?: GatewayDriverRegisterOptions;
+	export interface GatewaysOptions extends Partial<Record<string, GatewayStorageOptions>> {
+		clientStorage?: GatewayStorageOptions;
+		guilds?: GatewayStorageOptions;
+		users?: GatewayStorageOptions;
 	}
+
 
 	// Parsers
 	export interface ArgResolverCustomMethod {
@@ -1140,98 +987,11 @@ declare module 'klasa' {
 
 	export interface ScheduledTaskUpdateOptions extends Filter<ScheduledTaskOptions, 'id'> {
 		id?: never;
+		data?: string;
 		repeat?: string;
 		time?: TimeResolvable;
 	}
 
-	// Settings
-	export interface GatewayJSON {
-		options: { provider: string };
-		schema: SchemaFolderAddOptions;
-		type: string;
-	}
-
-	export interface GatewayGetPathOptions {
-		avoidUnconfigurable?: boolean;
-		errors?: boolean;
-		piece?: boolean;
-	}
-
-	export interface GatewayGetPathResult {
-		piece: SchemaPiece;
-		route: string[];
-	}
-
-	export type QueryBuilderDatatype = string | {
-		array?: (datatype: string) => string;
-		resolver?: <T = any>(input: any, schemaPiece: SchemaPiece) => T;
-		type: string | ((piece: SchemaPiece) => string);
-	};
-
-	export type QueryBuilderOptions = {
-		arrayResolver?: (values: Array<any>, piece: SchemaPiece, resolver: Function) => string;
-		formatDatatype?: (name: string, datatype: string, def?: string) => string;
-	} & Filter<Record<string, QueryBuilderDatatype | ((piece: SchemaPiece) => string)>, 'arrayResolver' | 'formatDatatype'>;
-
-	export type GuildResolvable = KlasaGuild
-		| KlasaMessage
-		| GuildChannel
-		| Snowflake;
-
-	export interface SettingsResetOptions {
-		avoidUnconfigurable?: boolean;
-		force?: boolean;
-	}
-
-	export interface SettingsUpdateOptions {
-		action?: 'add' | 'remove' | 'auto' | 'overwrite';
-		arrayPosition?: number;
-		avoidUnconfigurable?: boolean;
-		force?: boolean;
-	}
-
-	export interface SettingsUpdateResult {
-		errors: Error[];
-		updated: SettingsUpdateResultEntry[];
-	}
-
-	export interface SettingsUpdateResultEntry {
-		data: [string, any];
-		piece: SchemaPiece;
-	}
-
-	export interface GatewayDriverRegisterOptions {
-		provider?: string;
-		schema?: Schema;
-		syncArg?: string[] | string | true;
-	}
-
-	export type SchemaFolderAddOptions = SchemaFolderOptions | SchemaPieceOptions;
-
-	export interface SchemaPieceOptions {
-		array?: boolean;
-		configurable?: boolean;
-		default?: any;
-		min?: number;
-		max?: number;
-		filter?: ((client: KlasaClient, value: any, schema: SchemaPiece, language: Language) => boolean) | null;
-	}
-
-	export interface SchemaPieceEditOptions extends SchemaPieceOptions {
-		type?: string;
-	}
-
-	export type SchemaFolderOptions = {
-		type?: 'Folder';
-	} & Filter<Record<string, SchemaPieceOptions>, 'type'>;
-
-	export type GatewayDriverJSON = {
-		clientStorage: GatewayJSON;
-		guilds: GatewayJSON;
-		users: GatewayJSON;
-		keys: string[];
-		ready: boolean;
-	} & Filter<Record<string, GatewayJSON>, 'keys' | 'ready'>;
 
 	// Structures
 	export interface PieceOptions {
@@ -1263,7 +1023,7 @@ declare module 'klasa' {
 		promptTime?: number;
 		quotedStringSupport?: boolean;
 		requiredSettings?: string[];
-		runIn?: Array<'text' | 'dm' | 'news'>;
+		runIn?: Array<'text' | 'dm'>;
 		subcommands?: boolean;
 		usage?: string;
 		usageDelim?: string;
@@ -1587,6 +1347,15 @@ declare module 'klasa' {
 
 //#endregion
 
+//#region Augments
+import {
+	SettingsUpdateResults,
+	SettingsUpdateContext,
+	ProviderStore,
+	SerializerStore,
+	GatewayDriver
+} from '@klasa/settings-gateway';
+
 }
 
 declare module 'discord.js' {
@@ -1632,6 +1401,7 @@ declare module 'discord.js' {
 		options: Required<KlasaClientOptions>;
 		userBaseDirectory: string;
 		console: KlasaConsole;
+		users: KlasaUserStore;
 		arguments: ArgumentStore;
 		commands: CommandStore;
 		inhibitors: InhibitorStore;
@@ -1669,9 +1439,10 @@ declare module 'discord.js' {
 		on(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
 		on(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
 		on(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
-		on(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-		on(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-		on(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+		on(event: 'settingsSync', listener: (entry: Settings) => void): this;
+		on(event: 'settingsCreate', listener: (entry: Settings, changes: SettingsUpdateResults, context: SettingsUpdateContext) => void): this;
+		on(event: 'settingsDelete', listener: (entry: Settings) => void): this;
+		on(event: 'settingsUpdate', listener: (entry: Settings, changes: SettingsUpdateResults, context: SettingsUpdateContext) => void): this;
 		on(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		on(event: 'verbose', listener: (data: any) => void): this;
 		on(event: 'wtf', listener: (failure: Error) => void): this;
@@ -1690,9 +1461,10 @@ declare module 'discord.js' {
 		once(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
 		once(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
 		once(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
-		once(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-		once(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-		once(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+		once(event: 'settingsSync', listener: (entry: Settings) => void): this;
+		once(event: 'settingsCreate', listener: (entry: Settings, changes: SettingsUpdateResults, context: SettingsUpdateContext) => void): this;
+		once(event: 'settingsDelete', listener: (entry: Settings) => void): this;
+		once(event: 'settingsUpdate', listener: (entry: Settings, changes: SettingsUpdateResults, context: SettingsUpdateContext) => void): this;
 		once(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		once(event: 'verbose', listener: (data: any) => void): this;
 		once(event: 'wtf', listener: (failure: Error) => void): this;
@@ -1711,9 +1483,10 @@ declare module 'discord.js' {
 		off(event: 'pieceLoaded', listener: (piece: Piece) => void): this;
 		off(event: 'pieceReloaded', listener: (piece: Piece) => void): this;
 		off(event: 'pieceUnloaded', listener: (piece: Piece) => void): this;
-		off(event: 'settingsCreateEntry', listener: (entry: Settings) => void): this;
-		off(event: 'settingsDeleteEntry', listener: (entry: Settings) => void): this;
-		off(event: 'settingsUpdateEntry', listener: (oldEntry: Settings, newEntry: Settings, path?: string) => void): this;
+		off(event: 'settingsSync', listener: (entry: Settings) => void): this;
+		off(event: 'settingsCreate', listener: (entry: Settings, changes: SettingsUpdateResults, context: SettingsUpdateContext) => void): this;
+		off(event: 'settingsDelete', listener: (entry: Settings) => void): this;
+		off(event: 'settingsUpdate', listener: (entry: Settings, changes: SettingsUpdateResults, context: SettingsUpdateContext) => void): this;
 		off(event: 'taskError', listener: (scheduledTask: ScheduledTask, task: Task, error: Error) => void): this;
 		off(event: 'verbose', listener: (data: any) => void): this;
 		off(event: 'wtf', listener: (failure: Error) => void): this;
@@ -1723,6 +1496,7 @@ declare module 'discord.js' {
 		settings: Settings;
 		readonly language: Language;
 	}
+
 
 	export interface Message extends PartialSendAliases {
 		guildSettings: Settings;
@@ -1748,15 +1522,11 @@ declare module 'discord.js' {
 		usableCommands(): Promise<Collection<string, Command>>;
 		hasAtLeastPermissionLevel(min: number): Promise<boolean>;
 	}
-
 	export interface User extends SendAliases {
 		settings: Settings;
 	}
-
 	export interface TextChannel extends SendAliases, ChannelExtendables { }
-
 	export interface DMChannel extends SendAliases, ChannelExtendables { }
-
 	interface PartialSendAliases {
 		sendLocale(key: string, options?: MessageOptions | MessageAdditions): Promise<KlasaMessage>;
 		sendLocale(key: string, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<KlasaMessage>;
@@ -1777,7 +1547,6 @@ declare module 'discord.js' {
 		sendCode(language: string, content: StringResolvable, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<KlasaMessage>;
 		sendCode(language: string, content: StringResolvable, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<KlasaMessage[]>;
 	}
-
 	interface SendAliases extends PartialSendAliases {
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions | MessageAdditions): Promise<KlasaMessage>;
 		sendFile(attachment: BufferResolvable, name?: string, content?: StringResolvable, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<KlasaMessage>;
@@ -1786,16 +1555,14 @@ declare module 'discord.js' {
 		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions & { split?: false } | MessageAdditions): Promise<KlasaMessage>;
 		sendFiles(attachments: MessageAttachment[], content: StringResolvable, options?: MessageOptions & { split: true | SplitOptions } | MessageAdditions): Promise<KlasaMessage[]>;
 	}
-
 	interface ChannelExtendables {
 		readonly attachable: boolean;
 		readonly embedable: boolean;
 		readonly postable: boolean;
 		readonly readable: boolean;
 	}
-
 	interface Constructor<C> {
 		new(...args: any[]): C;
 	}
-
 }
+//#endregion
