@@ -28,10 +28,8 @@ module.exports = class extends Event {
 
 		this.client.mentionPrefix = new RegExp(`^<@!?${this.client.user.id}>`);
 
-		this.client.settings = this.client.gateways.clientStorage.get(this.client.user.id, true);
-		// Added for consistency with other datastores, Client#clients does not exist
-		this.client.gateways.clientStorage.cache.set(this.client.user.id, this.client);
-		await this.client.gateways.sync();
+		this.client.settings = this.client.gateways.get('clientStorage').acquire(this, this.client.user.id);
+		await Promise.all(this.client.gateways.map((gateway) => gateway.sync()));
 
 		// Init all the pieces
 		await Promise.all(this.client.pieceStores.filter(store => !['providers', 'extendables'].includes(store.name)).map(store => store.init()));

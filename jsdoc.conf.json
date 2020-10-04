@@ -1,0 +1,55 @@
+{
+	"source": {
+		"include": [
+			"src"
+		]
+	},
+	"plugins": [
+		"plugins/markdown",
+		"plugins/summarize"
+	],
+	"opts": {
+		"template": "node_modules/clean-jsdoc-theme",
+		"encoding": "utf8",
+		"destination": "./docs",
+		"recurse": true,
+		"tutorials": "./guides",
+		"package": "./package.json",
+		"readme": "./README.md",
+		"theme_opts":{
+			"title": "PenguBot's klasa fork", 
+			"filter": false,
+			"menu": [
+				{
+					"title": "Klasa's original documentation", 
+					"link": "https://klasa.js.org",
+					"target": "_blank"
+				},
+				{
+					"title": "Join Pengu's server!", 
+					"link": "https://pengubot.com/support",
+					"target": "_blank"
+				},
+				{
+					"title": "Github repo",
+					"link": "https://github.com/pengubot/klasa/",
+					"target": "_blank"
+				}
+			],
+			"meta": [
+				"<meta name=\"author\" content=\"PenguBot's Dev Team\">", 
+				"<meta name=\"description\" content=\"Documentation for PenguBot's klasa fork\">",
+				"<meta name=\"robots\" content=\"index,follow\">", 
+				"<meta name=\"og:title\" content=\"PenguBot's Klasa fork documentation\">", 
+				"<meta name=\"twitter:title\" content=\"PenguBot's Klasa fork documentation\">", 
+				"<meta name=\"og:description\" content=\"Documentation for PenguBot's klasa fork\">", 
+				"<meta name=\"twitter:description\" content=\"Documentation for PenguBot's klasa fork\">", 
+				"<meta name=\"og:url\" content=\"https://pengubot.github.io/klasa\">", 
+				"<meta name=\"twitter:card\" content=\"https://pengubot.github.io/klasa\">"
+			],
+			
+			"footer": "THIS IS PROVIDED AS-IS. NO SUPPORT WILL BE PROVIDED"
+		}
+		
+	}
+}

@@ -273,7 +273,7 @@ module.exports = Structures.extend('Message', Message => {
 			 * @since 0.5.0
 			 * @type {Settings}
 			 */
-			this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.guilds.defaults;
+			this.guildSettings = this.guild ? this.guild.settings : this.client.gateways.get('guilds').schema.defaults;
 
 			this._parseCommand();
 		}
@@ -321,8 +321,8 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_customPrefix() {
-			if (!this.guildSettings.prefix) return null;
-			for (const prf of Array.isArray(this.guildSettings.prefix) ? this.guildSettings.prefix : [this.guildSettings.prefix]) {
+			if (!this.guildSettings.get('prefix')) return null;
+			for (const prf of Array.isArray(this.guildSettings.get('prefix')) ? this.guildSettings.get('prefix') : [this.guildSettings.get('prefix')]) {
 				const testingPrefix = this.constructor.prefixes.get(prf) || this.constructor.generateNewPrefix(prf, this.client.options.prefixCaseInsensitive ? 'i' : '');
 				if (testingPrefix.regex.test(this.content)) return testingPrefix;
 			}
@@ -347,7 +347,7 @@ module.exports = Structures.extend('Message', Message => {
 		 * @private
 		 */
 		_naturalPrefix() {
-			if (this.guildSettings.disableNaturalPrefix || !this.client.options.regexPrefix) return null;
+			if (this.guildSettings.get('disableNaturalPrefix') || !this.client.options.regexPrefix) return null;
 			const results = this.client.options.regexPrefix.exec(this.content);
 			return results ? { length: results[0].length, regex: this.client.options.regexPrefix } : null;
 		}
