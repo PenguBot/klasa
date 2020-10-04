@@ -17,7 +17,7 @@
   "scripts": {
     "lint": "npx eslint --fix src && npx eslint --fix --config .eslintrcmd.json --ext md guides && npx tslint --fix 'typings/*.ts'",
     "test:lint": "npx eslint src && npx tslint 'typings/*.ts' && npx eslint --config .eslintrcmd.json --ext md guides && npx markdownlint guides README.md",
-    "docs": "npx dg --source src --custom guides/.docconfig.json --output dist/docs.json --logging"
+    "docs": "jsdoc -c jsdoc.conf.json"
   },
   "dependencies": {
     "@klasa/settings-gateway": "github:skyra-project/settings-gateway#build",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/node": "^13.13.15",
+    "clean-jsdoc-theme": "^2.2.11",
     "docgen": "github:dirigeants/docsgen",
     "eslint": "^6.8.0",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
