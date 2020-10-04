@@ -13,7 +13,6 @@
 		"encoding": "utf8",
 		"destination": "./docs",
 		"recurse": true,
-		"tutorials": "./guides",
 		"package": "./package.json",
 		"readme": "./README.md",
 		"theme_opts":{
