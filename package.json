@@ -28,8 +28,8 @@
     "discord.js": "^12.3.1"
   },
   "devDependencies": {
-    "@types/node": "^13.13.25",
-    "clean-jsdoc-theme": "^2.2.11",
+    "@types/node": "^13.13.26",
+    "clean-jsdoc-theme": "^2.2.12",
     "docgen": "github:dirigeants/docsgen",
     "eslint": "^6.8.0",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
