@@ -28,8 +28,8 @@
     "discord.js": "^12.4.1"
   },
   "devDependencies": {
-    "@types/node": "^13.13.25",
-    "clean-jsdoc-theme": "^2.2.11",
+    "@types/node": "^13.13.28",
+    "clean-jsdoc-theme": "^2.2.12",
     "docgen": "github:dirigeants/docsgen",
     "eslint": "^6.8.0",
     "eslint-config-klasa": "github:dirigeants/klasa-lint",
@@ -43,6 +43,6 @@
   },
   "private": false,
   "publishConfig": {
-		"access": "public"
-	}
+    "access": "public"
+  }
 }
